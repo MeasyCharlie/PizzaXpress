@@ -9,7 +9,10 @@ const PORT = process.env.PORT || 3000
 const mongoose = require('mongoose');
 const session = require('express-session');
 const flash = require('express-flash')
-const MongoDbStore = require('connect-mongo')
+const MongoDbStore = require('connect-mongo');
+const passport = require('passport');
+const { FALSE } = require('sass');
+
 
 //database Connection
 
@@ -28,6 +31,7 @@ connection.once('open', () => {
 //     collection: 'sessions'
 // })
 
+
 //session config
 app.use(session({
     secret: process.env.COOKIE_SECRET,
@@ -37,6 +41,18 @@ app.use(session({
     cookie: {maxAge: 1000 * 60 * 60 * 24}
 }));
 
+
+//passport config
+const passportInit = require('./app/config/passport');
+passportInit(passport);
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(flash());
+
+//Assets
+app.use(express.static('public'));
+app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
 //global middleware jisse ki session ki info layout.ejs tak ja sake
@@ -51,11 +67,10 @@ app.set('views', path.join(__dirname, '/resources/views'));
 app.set('view engine', 'ejs');
 
 
-app.use(flash());
 
 
-//Assets
-app.use(express.static('public'));
+
+
 
 
 //(app) se function call ho rahi h jisse function chal jae web.js m 
