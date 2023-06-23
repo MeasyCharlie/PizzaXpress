@@ -25,11 +25,39 @@ function init(passport) {
             done(null, user._id)
         })
 
-        passport.deserializeUser( (id, done) => {
-            User.findById(id, (err, user) =>{
-                done(err, user)
-            })
-        })
+        // passport.deserializeUser( (id, done) => {
+        //     User.findById(id).then(user =>{
+        //         done( user);
+        //     })
+        // })
+        // passport.deserializeUser(function(id, done){
+        //     User.findById(id).then(user => {
+        //         // if(err){
+        //         //     console.log('Error in finding user --> Passport');
+        //         //     return done(err);
+        //         // }
+        //         return done(null, user);
+        //     })
+        // })
+        // passport.deserializeUser(function(user, done) {
+        //     process.nextTick(function() {
+        //       return done(null, user);
+        //     });
+        // });
+        // passport.deserializeUser --> User.findById(id).exec()
+        // .then(user => {
+        //   done(null, user);
+        // })
+        // .catch(err => {
+        //   done(err);
+        // });
+        passport.deserializeUser(function(id, done) {
+            User.findById(id).then(function (user) {
+                done(null, user);
+            }).catch(function (err) {
+                done(err, null, { message: 'User does not exist' });
+            });
+        });
     }))
 }
 

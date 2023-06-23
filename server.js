@@ -58,6 +58,7 @@ app.use(express.json());
 //global middleware jisse ki session ki info layout.ejs tak ja sake
 app.use((req, res, next)=>{
     res.locals.session = req.session;
+    res.locals.user = req.user;
     next()
 })
 

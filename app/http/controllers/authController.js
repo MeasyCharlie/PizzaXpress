@@ -81,7 +81,19 @@ function authController(){
 
             console.log(req.body);
 
+        },
+        logout(req, res){
+            //passport se logout ho jaega
+            // req.logout();
+            // return res.redirect('/login');
+
+            req.logout(function(err){
+                if(err){return next(err);}
+                res.redirect('/');
+            })
+
         }
+
     }
 }
 
