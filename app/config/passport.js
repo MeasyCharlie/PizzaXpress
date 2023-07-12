@@ -1,6 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
+
 function init(passport) {
     passport.use( new LocalStrategy({ usernameField: 'email' }, async (email, password, done) =>{
         //login logic
@@ -27,7 +28,7 @@ function init(passport) {
 
         // passport.deserializeUser( (id, done) => {
         //     User.findById(id).then(user =>{
-        //         done( user);
+        //         done( null,user);
         //     })
         // })
         // passport.deserializeUser(function(id, done){
@@ -51,6 +52,9 @@ function init(passport) {
         // .catch(err => {
         //   done(err);
         // });
+
+
+        //accepted code
         passport.deserializeUser(function(id, done) {
             User.findById(id).then(function (user) {
                 done(null, user);

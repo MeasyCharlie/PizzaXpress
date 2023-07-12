@@ -14,10 +14,9 @@ const passport = require('passport');
 const { FALSE } = require('sass');
 
 
-//database Connection
-
-const url = 'mongodb://localhost/PizzaExpress';
-mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
+// //database Connection
+// const url = 'mongodb://localhost/PizzaExpress';
+mongoose.connect(process.env.MONGO_CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology: true});
 const connection = mongoose.connection;
 connection.once('open', () => {
     console.log('Database connected...');
@@ -37,7 +36,9 @@ app.use(session({
     secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoDbStore.create({mongoUrl: url}),
+    store: MongoDbStore.create({
+        client: connection.getClient()
+    }),
     cookie: {maxAge: 1000 * 60 * 60 * 24}
 }));
 
