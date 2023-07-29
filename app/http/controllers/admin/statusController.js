@@ -5,7 +5,9 @@ function statusController(){
         update(req, res){
             Order.updateOne({_id: req.body.orderId}, {status: req.body.status}).then(( data)=>{
 
-                
+                //emit event
+                const eventEmitter = req.app.get('eventEmitter');
+                eventEmitter.emit('orderUpdated', {id:req.body.orderId, status: req.body.status});
                 return res.redirect('/admin/orders');
             })
         }
