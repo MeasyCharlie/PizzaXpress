@@ -15,8 +15,8 @@ const { FALSE } = require("sass");
 const Emitter = require("events");
 
 // //database Connection
-// const url = 'mongodb://localhost/PizzaExpress';
-mongoose.connect(process.env.MONGO_CONNECTION_URL, {
+const url = process.env.MONGO_CONNECTION_URL;
+mongoose.connect(url, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -40,7 +40,8 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: MongoDbStore.create({
-      client: connection.getClient(),
+      mongoUrl: url
+      // client: connection.getClient(),
     }),
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
   })
